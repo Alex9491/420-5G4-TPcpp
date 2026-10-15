@@ -160,9 +160,9 @@ void Library::displayAllBooks() {
         });
     
     cout << "\n=== TOUS LES LIVRES ===\n";
-    for (size_t i = 0; i < books.size(); ++i) {
+    for (size_t i = 0; i < livres.size(); ++i) {
         cout << "\nLivre " << (i + 1) << " :\n";
-        cout << books[i]->toString() << "\n";
+        cout << livres[i]->toString() << "\n";
         cout << "-------------------------\n";
     }
 }
