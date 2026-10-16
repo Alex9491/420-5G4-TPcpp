@@ -75,3 +75,4 @@ On adopte cette solution, car si, dans le futur, la bibliothèque contient des m
 Pour interfacer ceci avec le C++, je vais utiliser un connecteur comme MySQL Connector/C++. Le programme va être capable de communiquer avec la bd.
 Cela permettra de faire l'évolution de la bibliothèque d'Alexandrie en étant capable de stocker des millions de livres.
 
+
