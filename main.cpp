@@ -138,8 +138,11 @@ int main(int argc, char* argv[]) {
             
             case 2: { // Remove Book
                 string isbn = getInput("Entrez l'ISBN du livre à supprimer : ");
-                
+                Book* livre = library.findBookByISBN(isbn);
+                string livreASupprimer = livre ? livre->toFileFormat(): "";
+
                 if (library.removeBook(isbn)) {
+                    fileManager.sauvegarderLeFichierJournal("SUPPRESSION LIVRE", livreASupprimer);
                     cout << "Livre supprimé avec succès !\n";
                 } else {
                     cout << "Livre non trouvé.\n";
@@ -151,6 +154,7 @@ int main(int argc, char* argv[]) {
             case 3: { // Search by Title
                 string title = getInput("Entrez le titre à rechercher : ");
                 auto results = library.searchBooksByTitle(title);
+                fileManager.sauvegarderLeFichierJournal("RECHERCHE PAR TITRE", title);
                 
                 if (results.empty()) {
                     cout << "Aucun livre trouvé avec ce titre.\n";
@@ -169,6 +173,7 @@ int main(int argc, char* argv[]) {
             case 4: { // Search by Author
                 string author = getInput("Entrez l'auteur à rechercher : ");
                 auto results = library.searchBooksByAuthor(author);
+                fileManager.sauvegarderLeFichierJournal("RECHERCHE PAR AUTEUR", author);
                 
                 if (results.empty()) {
                     cout << "Aucun livre trouvé de cet auteur.\n";
@@ -186,11 +191,13 @@ int main(int argc, char* argv[]) {
             
             case 5: // Display All Books
                 library.displayAllBooks();
+                fileManager.sauvegarderLeFichierJournal("AFFICHER TOUS LES LIVRES", "");
                 pauseForInput();
                 break;
             
             case 6: // Display Available Books
                 library.displayAvailableBooks();
+                fileManager.sauvegarderLeFichierJournal("AFFICHER LES LIVRES DISPONIBLES", "");
                 pauseForInput();
                 break;
             
@@ -203,6 +210,7 @@ int main(int argc, char* argv[]) {
                 } else {
                     User newUser(name, userId);
                     library.addUser(newUser);
+                    fileManager.sauvegarderLeFichierJournal("AJOUT UTILISATEUR", newUser.toFileFormat());
                     cout << "Utilisateur ajouté avec succès !\n";
                 }
                 pauseForInput();
@@ -211,14 +219,18 @@ int main(int argc, char* argv[]) {
             
             case 8: // Display All Users
                 library.displayAllUsers();
+                fileManager.sauvegarderLeFichierJournal("AFFICHER TOUS LES UTILISATEURS", "");
                 pauseForInput();
                 break;
             
             case 9: { // Check Out Book
                 string isbn = getInput("Entrez l'ISBN du livre à emprunter : ");
                 string userId = getInput("Entrez l'ID de l'utilisateur : ");
-                
+                Book* livre = library.findBookByISBN(isbn);
+                string livreAEmprunter = livre ? livre->toFileFormat(): "";
+
                 if (library.checkOutBook(isbn, userId)) {
+                    fileManager.sauvegarderLeFichierJournal("EMPRUNT", livreAEmprunter);
                     cout << "Livre emprunté avec succès !\n";
                 } else {
                     cout << "Erreur : Impossible d'emprunter le livre. Vérifiez l'ISBN, l'ID utilisateur et la disponibilité du livre.\n";
@@ -229,9 +241,12 @@ int main(int argc, char* argv[]) {
             
             case 10: { // Return Book
                 string isbn = getInput("Entrez l'ISBN du livre à retourner : ");
-                
+                Book* livre = library.findBookByISBN(isbn);
+                string livreARetourner = livre ? livre->toFileFormat(): "";
+
                 if (library.returnBook(isbn)) {
                     cout << "Livre retourné avec succès !\n";
+                    fileManager.sauvegarderLeFichierJournal("RETOURNER LIVRE", livreARetourner);
                 } else {
                     cout << "Erreur : Impossible de retourner le livre. Vérifiez l'ISBN et que le livre est bien emprunté.\n";
                 }
@@ -245,12 +260,14 @@ int main(int argc, char* argv[]) {
                 cout << "Livres Disponibles : " << library.getAvailableBookCount() << "\n";
                 cout << "Livres Empruntés : " << library.getCheckedOutBookCount() << "\n";
                 cout << "Total des Utilisateurs : " << library.getAllUsers().size() << "\n";
+                fileManager.sauvegarderLeFichierJournal("AFFICHER STATISTIQUES", "");
                 pauseForInput();
                 break;
             }
             
             case 12: { // Save Data
                 if (fileManager.saveLibraryData(library)) {
+                    fileManager.sauvegarderLeFichierJournal("ENREGISTRER DONNEES", "");
                     cout << "Données de la bibliothèque sauvegardées avec succès !\n";
                 } else {
                     cout << "Erreur lors de la sauvegarde des données de la bibliothèque.\n";
@@ -261,6 +278,7 @@ int main(int argc, char* argv[]) {
             
             case 13: { // Create Backup
                 fileManager.createBackup();
+                fileManager.sauvegarderLeFichierJournal("CREER SAUVEGARDE", "");
                 pauseForInput();
                 break;
             }
@@ -268,6 +286,7 @@ int main(int argc, char* argv[]) {
             case 0: // Exit
                 cout << "Sauvegarde des données avant la fermeture...\n";
                 fileManager.saveLibraryData(library);
+                fileManager.sauvegarderLeFichierJournal("QUITTER", "");
                 cout << "Merci d'avoir utilisé le Système de Gestion de Bibliothèque Personnelle !\n";
                 running = false;
                 break;
