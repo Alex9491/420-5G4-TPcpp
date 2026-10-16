@@ -128,6 +128,7 @@ int main(int argc, char* argv[]) {
                     }
                     Book newBook(title, author, isbn);
                     library.addBook(newBook);
+                    fileManager.sauvegarderLeFichierJournal("AJOUT LIVRE", newBook.toFileFormat());
                     cout << "Livre ajouté avec succès !\n";
                 }
             }

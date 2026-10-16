@@ -21,6 +21,7 @@ public:
     bool loadLibraryData(Library& library);
     
     // Individual file operations
+    void sauvegarderLeFichierJournal(const string& evenement, const string& description);
     bool saveBooksToFile(Library& library);
     bool saveUsersToFile(Library& library);
     bool loadBooksFromFile(Library& library);
