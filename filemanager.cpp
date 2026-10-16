@@ -13,6 +13,10 @@ FileManager::FileManager(const string& booksFile, const string& usersFile)
 
 // Save all library data
 bool FileManager::saveLibraryData(Library& library) {
+    if (booksFileName.empty() || usersFileName.empty()) {
+        cout << "Erreur : sauvegarde impossible sans répertoire de données. " << "Utilisez la commande --data-dir pour indiquer le chemin du répertoire.\n";
+        return false;
+    }
     return saveBooksToFile(library) && saveUsersToFile(library);
 }
 
